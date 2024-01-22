@@ -1,1 +1,1 @@
-Sample Solitare Solver with demonstation of immutble objects records and arrays
+Sample Solitare Solver with the demonstration of immutable objects: records and arrays
