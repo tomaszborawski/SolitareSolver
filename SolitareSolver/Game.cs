@@ -19,9 +19,7 @@ namespace SolitareSolver
                 var tops = ImmutableArray.CreateBuilder<Top>();
                 foreach (var item in ases)
                 {
-                    var cards = ImmutableArray.CreateBuilder<Card>();
-                    cards.Add(item);
-                    tops.Add(new Top(item.Color, cards.ToImmutableArray()));
+                    tops.Add(new Top(item.Color, ImmutableArray<Card>.Empty.Add(item)));
                 }
                 return t with { Hand = t.Hand with { Cards = t.Hand.Cards!.Value.RemoveRange(ases) }, Tops = tops.ToImmutableArray() };
             }
@@ -71,9 +69,7 @@ namespace SolitareSolver
                     var c = t.Columns[i].Cards!.Value[t.Columns[i].Position];
                     if (c.Number == Numbers.Ace)
                     {
-                        var moves = ImmutableArray.CreateBuilder<CardMove>();
-                        moves.Add(new CardMoveToTopFromColumn(c, i + 1));
-                        ret.Add(new CardMoves(moves.ToImmutableArray(), [i + 1]));
+                        ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveToTopFromColumn(c, t.Columns[i].ID)), [t.Columns[i].ID]));
                     }
                 }
             }
@@ -186,9 +182,7 @@ namespace SolitareSolver
                     {
                         if (t.Hand.Cards != null && t.Hand.Cards.Value.Contains(card))
                         {
-                            var moves = ImmutableArray.CreateBuilder<CardMove>();
-                            moves.Add(new CardMoveToTopFromHand(card));
-                            ret.Add(new CardMoves(moves.ToImmutableArray(), []));
+                            ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveToTopFromHand(card)), []));
                         }
                     }
 
@@ -197,9 +191,7 @@ namespace SolitareSolver
                     {
                         if (col.Cards!.Value[^1] == card)
                         {
-                            var moves = ImmutableArray.CreateBuilder<CardMove>();
-                            moves.Add(new CardMoveToTopFromColumn(card, col.ID));
-                            ret.Add(new CardMoves(moves.ToImmutableArray(), [col.ID]));
+                            ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveToTopFromColumn(card, col.ID)), [col.ID]));
                         }
                     }
                 }
@@ -216,12 +208,10 @@ namespace SolitareSolver
                 var kingCols = t.Columns.Where(o => o.Cards.HasValue && o.Position > 0 && o.Cards.Value[o.Position].Number == Numbers.King).ToList();
                 for (int i = 0; i < kingCols.Count; i++)
                 {
-                    var moves = ImmutableArray.CreateBuilder<CardMove>();
                     for (int j = kingCols[i].Position; j < kingCols[i].Cards!.Value.Length; j++)
                     {
-                        moves.Add(new CardMoveFromColumn(kingCols[i].Cards!.Value[j], kingCols[i].ID, emptyCols[i % emptyCols.Count].ID));
+                        ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveFromColumn(kingCols[i].Cards!.Value[j], kingCols[i].ID, emptyCols[i % emptyCols.Count].ID)), [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
                     }
-                    ret.Add(new CardMoves(moves.ToImmutableArray(), [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
                 }
 
                 //from Hand

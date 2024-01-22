@@ -7,12 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolitareSolver", "SolitareS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolitareSolver.Model", "SolitareSolver.Model\SolitareSolver.Model.csproj", "{5B396F6D-2C74-4FA2-8C1B-2917AA20B2AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolitareSolver.Test", "TestProject1\SolitareSolver.Test.csproj", "{F9A8EC96-D7E6-4BFB-BF66-6D1FCF24A3C9}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5CA7806B-2A7C-4B40-AFEE-50D1FC9CA63A}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SolitareSolver.Test", "SolitareSolver.Test\SolitareSolver.Test.csproj", "{272B5254-1D8E-4A87-A0A1-1B3B38D9286B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,10 @@ Global
 		{5B396F6D-2C74-4FA2-8C1B-2917AA20B2AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B396F6D-2C74-4FA2-8C1B-2917AA20B2AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B396F6D-2C74-4FA2-8C1B-2917AA20B2AF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9A8EC96-D7E6-4BFB-BF66-6D1FCF24A3C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9A8EC96-D7E6-4BFB-BF66-6D1FCF24A3C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9A8EC96-D7E6-4BFB-BF66-6D1FCF24A3C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9A8EC96-D7E6-4BFB-BF66-6D1FCF24A3C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{272B5254-1D8E-4A87-A0A1-1B3B38D9286B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{272B5254-1D8E-4A87-A0A1-1B3B38D9286B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{272B5254-1D8E-4A87-A0A1-1B3B38D9286B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{272B5254-1D8E-4A87-A0A1-1B3B38D9286B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
