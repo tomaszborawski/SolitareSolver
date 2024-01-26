@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using SolitareSolver;
 using SolitareSolver.Model;
+using SolitareSolver.Game;
 var table = Table.Generate();
 table = Game.RemoveAcesFromHand(table);
 

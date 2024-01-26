@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolitareSolver
+namespace SolitareSolver.Game
 {
-    internal static class Game
+    public static class Game
     {
         public static Table RemoveAcesFromHand(Table t) // Remove Aces from Hand
         {
@@ -19,7 +19,7 @@ namespace SolitareSolver
                 var tops = ImmutableArray.CreateBuilder<Top>();
                 foreach (var item in ases)
                 {
-                    tops.Add(new Top(item.Color, ImmutableArray<Card>.Empty.Add(item)));
+                    tops.Add(new Top(item.Color, [item]));
                 }
                 return t with { Hand = t.Hand with { Cards = t.Hand.Cards!.Value.RemoveRange(ases) }, Tops = tops.ToImmutableArray() };
             }
@@ -59,7 +59,7 @@ namespace SolitareSolver
             return ret.ToImmutableArray();
         }
 
-        private static void RemoveAcesFromColumns(Table t, ImmutableArray<CardMoves>.Builder ret)
+        public static void RemoveAcesFromColumns(Table t, ImmutableArray<CardMoves>.Builder ret)
         {
             //Remove Aces
             for (int i = 0; i < t.Columns.Length; i++)
@@ -69,13 +69,13 @@ namespace SolitareSolver
                     var c = t.Columns[i].Cards!.Value[t.Columns[i].Position];
                     if (c.Number == Numbers.Ace)
                     {
-                        ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveToTopFromColumn(c, t.Columns[i].ID)), [t.Columns[i].ID]));
+                        ret.Add(new CardMoves([new CardMoveToTopFromColumn(c, t.Columns[i].ID)], [t.Columns[i].ID]));
                     }
                 }
             }
         }
 
-        private static void CheckColumnsForMove(Table t, ImmutableArray<CardMoves>.Builder ret, Column colbegin, Column colend, Card cbegin, Card cend)
+        public static void CheckColumnsForMove(Table t, ImmutableArray<CardMoves>.Builder ret, Column colbegin, Column colend, Card cbegin, Card cend)
         {
             if (cbegin.Number != Numbers.Ace && cend.Number != Numbers.Ace)
             {
@@ -168,7 +168,7 @@ namespace SolitareSolver
             return ret.ToImmutableArray();
         }
 
-        private static void MoveCardfromHandAndColumnToTop(Table t, ImmutableArray<CardMoves>.Builder ret)
+        public static void MoveCardfromHandAndColumnToTop(Table t, ImmutableArray<CardMoves>.Builder ret)
         {
             if (t.Tops != null)
             {
@@ -182,7 +182,7 @@ namespace SolitareSolver
                     {
                         if (t.Hand.Cards != null && t.Hand.Cards.Value.Contains(card))
                         {
-                            ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveToTopFromHand(card)), []));
+                            ret.Add(new CardMoves([new CardMoveToTopFromHand(card)], []));
                         }
                     }
 
@@ -191,14 +191,14 @@ namespace SolitareSolver
                     {
                         if (col.Cards!.Value[^1] == card)
                         {
-                            ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveToTopFromColumn(card, col.ID)), [col.ID]));
+                            ret.Add(new CardMoves([new CardMoveToTopFromColumn(card, col.ID)], [col.ID]));
                         }
                     }
                 }
             }
         }
 
-        private static void MoveKingFromColumnOrHand(Table t, ImmutableArray<CardMoves>.Builder ret)
+        public static void MoveKingFromColumnOrHand(Table t, ImmutableArray<CardMoves>.Builder ret)
         {
             // Move King from Column or Hand to empty Column
             var emptyCols = t.Columns.Where(o => !o.Cards.HasValue || o.Cards.Value.Length == 0).ToList();
@@ -210,7 +210,7 @@ namespace SolitareSolver
                 {
                     for (int j = kingCols[i].Position; j < kingCols[i].Cards!.Value.Length; j++)
                     {
-                        ret.Add(new CardMoves(ImmutableArray<CardMove>.Empty.Add(new CardMoveFromColumn(kingCols[i].Cards!.Value[j], kingCols[i].ID, emptyCols[i % emptyCols.Count].ID)), [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
+                        ret.Add(new CardMoves([new CardMoveFromColumn(kingCols[i].Cards!.Value[j], kingCols[i].ID, emptyCols[i % emptyCols.Count].ID)], [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
                     }
                 }
 

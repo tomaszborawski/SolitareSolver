@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SolitareSolver.Game\SolitareSolver.Game.csproj" />
     <ProjectReference Include="..\SolitareSolver.Model\SolitareSolver.Model.csproj" />
   </ItemGroup>
 
