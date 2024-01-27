@@ -83,15 +83,15 @@ namespace SolitareSolver.Game
                 var moves = ImmutableArray.CreateBuilder<CardMove>();
                 var number = cend.Number - 1;
                 var color = cend.Color;
-                var found = false;
+                var found = number == cbegin.Number;
                 while (number > cbegin.Number)
                 {
                     var card = t.Hand.Cards!.Value.Where(o => o.Number == number && HelperData.CheckColors(o.Color, color)).FirstOrDefault();
                     found = card != null;
                     if (found)
                     {
-                        moves.Add(new CardMoveFromHand(card, colend.ID));
-                        color = card.Color;
+                        moves.Add(new CardMoveFromHand(card!, colend.ID));
+                        color = card!.Color;
                         number--;
                     }
                     else
@@ -226,8 +226,8 @@ namespace SolitareSolver.Game
                         found = card != null;
                         if (found)
                         {
-                            moves.Add(new CardMoveFromHand(card, emptyCols[j % emptyCols.Count].ID));
-                            color = card.Color;
+                            moves.Add(new CardMoveFromHand(card!, emptyCols[j % emptyCols.Count].ID));
+                            color = card!.Color;
                             number++;
                         }
                         else
