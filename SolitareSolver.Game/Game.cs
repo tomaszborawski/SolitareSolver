@@ -239,7 +239,7 @@ namespace SolitareSolver.Game
                         {
                             moves.Add(new CardMoveFromColumn(colbegin.Cards!.Value[i], colbegin.ID, emptyCols[j % emptyCols.Count].ID));
                         }
-                        ret.Add(new CardMoves(moves.ToImmutableArray(), [colbegin.ID, emptyCols[j % emptyCols.Count].ID]));
+                        ret.Add(new CardMoves(moves.OrderByDescending(o => o.Card.Number).ToImmutableArray(), [colbegin.ID, emptyCols[j % emptyCols.Count].ID]));
                         j++;
                     }
                 }
