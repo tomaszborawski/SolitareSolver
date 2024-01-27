@@ -3,9 +3,9 @@ using System.Collections.Immutable;
 using System.Data.Common;
 using System.Drawing;
 
-namespace TestProject1
+namespace SolitareSolver.Test
 {
-    public class Tests
+    public class TableTests
     {
         private Table? t;
 

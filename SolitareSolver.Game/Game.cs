@@ -79,38 +79,33 @@ namespace SolitareSolver.Game
         {
             if (cbegin.Number != Numbers.Ace && cend.Number != Numbers.Ace)
             {
-                if (((int)cend.Number - (int)cbegin.Number) % 2 == 1)
+                //Search if we have all cards in Hand
+                var moves = ImmutableArray.CreateBuilder<CardMove>();
+                var number = cend.Number - 1;
+                var color = cend.Color;
+                var found = false;
+                while (number > cbegin.Number)
                 {
-                    //Search if we have all cards in Hand
-                    var moves = ImmutableArray.CreateBuilder<CardMove>();
-                    var number = cend.Number - 1;
-                    var color = cend.Color;
-                    var found = true;
-                    while (number > cbegin.Number)
-                    {
-                        var card = t.Hand.Cards!.Value.Where(o => o.Number == number && HelperData.CheckColors(o.Color, color)).FirstOrDefault();
-                        if (card != null)
-                        {
-                            moves.Add(new CardMoveFromHand(card, colend.ID));
-                            color = card.Color;
-                            number--;
-                        }
-                        else
-                        {
-                            found = false;
-                            break;
-                        }
-                    }
+                    var card = t.Hand.Cards!.Value.Where(o => o.Number == number && HelperData.CheckColors(o.Color, color)).FirstOrDefault();
+                    found = card != null;
                     if (found)
                     {
-                        if (HelperData.CheckColors(color, cbegin.Color))
+                        moves.Add(new CardMoveFromHand(card, colend.ID));
+                        color = card.Color;
+                        number--;
+                    }
+                    else
+                        break;
+                }
+                if (found)
+                {
+                    if (HelperData.CheckColors(color, cbegin.Color))
+                    {
+                        for (int i = colbegin.Position; i < colbegin.Cards!.Value.Length; i++)
                         {
-                            for (int i = colbegin.Position; i < colbegin.Cards!.Value.Length; i++)
-                            {
-                                moves.Add(new CardMoveFromColumn(colbegin.Cards!.Value[i], colbegin.ID, colend.ID));
-                            }
-                            ret.Add(new CardMoves(moves.ToImmutableArray(), [colbegin.ID, colend.ID]));
+                            moves.Add(new CardMoveFromColumn(colbegin.Cards!.Value[i], colbegin.ID, colend.ID));
                         }
+                        ret.Add(new CardMoves(moves.ToImmutableArray(), [colbegin.ID, colend.ID]));
                     }
                 }
             }
@@ -208,10 +203,12 @@ namespace SolitareSolver.Game
                 var kingCols = t.Columns.Where(o => o.Cards.HasValue && o.Position > 0 && o.Cards.Value[o.Position].Number == Numbers.King).ToList();
                 for (int i = 0; i < kingCols.Count; i++)
                 {
+                    var moves = ImmutableArray.CreateBuilder<CardMove>();
                     for (int j = kingCols[i].Position; j < kingCols[i].Cards!.Value.Length; j++)
                     {
-                        ret.Add(new CardMoves([new CardMoveFromColumn(kingCols[i].Cards!.Value[j], kingCols[i].ID, emptyCols[i % emptyCols.Count].ID)], [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
+                        moves.Add(new CardMoveFromColumn(kingCols[i].Cards!.Value[j], kingCols[i].ID, emptyCols[i % emptyCols.Count].ID));
                     }
+                    ret.Add(new CardMoves(moves.ToImmutableArray(), [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
                 }
 
                 //from Hand
@@ -222,21 +219,19 @@ namespace SolitareSolver.Game
                     var cend = colbegin.Cards!.Value[colbegin.Position];
                     var number = cend.Number + 1;
                     var color = cend.Color;
-                    var found = true;
+                    var found = false;
                     while (number <= Numbers.King)
                     {
                         var card = t.Hand.Cards!.Value.Where(o => o.Number == number && HelperData.CheckColors(o.Color, color)).FirstOrDefault();
-                        if (card != null)
+                        found = card != null;
+                        if (found)
                         {
                             moves.Add(new CardMoveFromHand(card, emptyCols[j % emptyCols.Count].ID));
                             color = card.Color;
                             number++;
                         }
                         else
-                        {
-                            found = false;
                             break;
-                        }
                     }
                     if (found)
                     {
