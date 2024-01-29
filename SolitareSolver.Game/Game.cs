@@ -13,6 +13,7 @@ namespace SolitareSolver.Game
     {
         public static Table RemoveAcesFromHand(Table t) // Remove Aces from Hand
         {
+            //Search Aces in Hand, remove from Hand and put it inro Top
             var ases = t.Hand.Cards!.Value.Where(o => o.Number == Numbers.Ace).Select(o => o).ToList();
             if (ases.Count > 0)
             {
@@ -41,6 +42,7 @@ namespace SolitareSolver.Game
                       where cid1 < cid2
                       select new { cid1, cid2 };
 
+            //Search initial possible moves
             foreach (var item in map)
             {
                 var colbegin = t.Columns[item.cid1];
@@ -61,7 +63,7 @@ namespace SolitareSolver.Game
 
         public static void RemoveAcesFromColumns(Table t, ImmutableArray<CardMoves>.Builder ret)
         {
-            //Remove Aces
+            //Search Aces in Columns, remove from Column and put it inro Top
             for (int i = 0; i < t.Columns.Length; i++)
             {
                 if (t.Columns[i].Position >= 0)
@@ -77,10 +79,12 @@ namespace SolitareSolver.Game
 
         public static void CheckColumnsForMove(Table t, ImmutableArray<CardMoves>.Builder ret, Column colbegin, Column colend, Card cbegin, Card cend)
         {
-            if (cbegin.Number != Numbers.Ace && cend.Number != Numbers.Ace)
+            if (cbegin.Number != Numbers.Ace && cend.Number != Numbers.Ace) //Aces are on the Top
             {
-                //Search if we have all cards in Hand
+                
                 var moves = ImmutableArray.CreateBuilder<CardMove>();
+
+                //Search if we have all cards in Hand
                 var number = cend.Number - 1;
                 var color = cend.Color;
                 var found = number == cbegin.Number;
@@ -99,6 +103,7 @@ namespace SolitareSolver.Game
                 }
                 if (found)
                 {
+                    //We have all cards from Hand and we check color
                     if (HelperData.CheckColors(color, cbegin.Color))
                     {
                         for (int i = colbegin.Position; i < colbegin.Cards!.Value.Length; i++)
@@ -120,14 +125,14 @@ namespace SolitareSolver.Game
 
             RemoveAcesFromColumns(t, ret);
 
-            //Map column
+            //Map column - only connection with affected columns
             var colids = Enumerable.Range(0, t.Columns.Length).ToList();
             var map = (from cid1 in colids
                        from cid2 in afectedColumns
                        where cid1 + 1 != cid2
                        select new { cid1 = cid1 + 1, cid2 }).ToList();
 
-            //Remove duplicate
+            //Remove duplicate afectedColumns[0] and afectedColumns[1]
             if (afectedColumns.Count == 2)
             {
                 var cid1 = afectedColumns[0];
@@ -136,6 +141,7 @@ namespace SolitareSolver.Game
                 map.Remove(m);
             }
 
+            //Search for next move
             foreach (var item in map)
             {
                 var col1 = t.Columns.Single(o => o.ID == item.cid1);
@@ -169,10 +175,11 @@ namespace SolitareSolver.Game
             {
                 foreach (var item in t.Tops)
                 {
+                    //Next card in the Top
                     var card = item.Cards[^1];
                     card = card with { Number = card.Number + 1 };
 
-                    //From Hand
+                    //Check if we have card in Hand
                     if (!ret.Any(o => o.Moves.OfType<CardMoveToTopFromHand>().Any()))
                     {
                         if (t.Hand.Cards != null && t.Hand.Cards.Value.Contains(card))
@@ -181,7 +188,7 @@ namespace SolitareSolver.Game
                         }
                     }
 
-                    //From Column
+                    //Check if we have card in Column
                     foreach (var col in t.Columns.Where(o => o.Cards != null && o.Cards.Value.Length > 0))
                     {
                         if (col.Cards!.Value[^1] == card)
@@ -195,11 +202,11 @@ namespace SolitareSolver.Game
 
         public static void MoveKingFromColumnOrHand(Table t, ImmutableArray<CardMoves>.Builder ret)
         {
-            // Move King from Column or Hand to empty Column
+            // Do we have empty column?
             var emptyCols = t.Columns.Where(o => !o.Cards.HasValue || o.Cards.Value.Length == 0).ToList();
             if (emptyCols.Count > 0)
             {
-                //from Column
+                //Search if we have last visible card King
                 var kingCols = t.Columns.Where(o => o.Cards.HasValue && o.Position > 0 && o.Cards.Value[o.Position].Number == Numbers.King).ToList();
                 for (int i = 0; i < kingCols.Count; i++)
                 {
@@ -211,15 +218,18 @@ namespace SolitareSolver.Game
                     ret.Add(new CardMoves(moves.ToImmutableArray(), [emptyCols[i % emptyCols.Count].ID, kingCols[i].ID]));
                 }
 
-                //from Hand
+                // We can only put King in empty column, so we are searching if we have card King in Hand and other cards in Hand 
+                // to remove card from column.
                 foreach (var colbegin in t.Columns.Where(o => o.Position > 0))
                 {
+                    // Start with first visible column in column
                     int j = 0;
                     var moves = ImmutableArray.CreateBuilder<CardMove>();
                     var cend = colbegin.Cards!.Value[colbegin.Position];
                     var number = cend.Number + 1;
                     var color = cend.Color;
                     var found = false;
+                    //Search until we have King
                     while (number <= Numbers.King)
                     {
                         var card = t.Hand.Cards!.Value.Where(o => o.Number == number && HelperData.CheckColors(o.Color, color)).FirstOrDefault();
@@ -235,10 +245,12 @@ namespace SolitareSolver.Game
                     }
                     if (found)
                     {
+                        //King foound
                         for (int i = colbegin.Position; i < colbegin.Cards!.Value.Length; i++)
                         {
                             moves.Add(new CardMoveFromColumn(colbegin.Cards!.Value[i], colbegin.ID, emptyCols[j % emptyCols.Count].ID));
                         }
+                        //We need to reorder cards
                         ret.Add(new CardMoves(moves.OrderByDescending(o => o.Card.Number).ToImmutableArray(), [colbegin.ID, emptyCols[j % emptyCols.Count].ID]));
                         j++;
                     }

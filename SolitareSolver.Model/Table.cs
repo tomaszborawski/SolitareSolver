@@ -98,7 +98,7 @@ namespace SolitareSolver.Model
                 }
             }
 
-
+            //Result
             if (moves.Length == 0)
             {
                 Console.CursorLeft = 0;
@@ -139,7 +139,7 @@ namespace SolitareSolver.Model
                         var ind = columnlist.IndexOf(col);
                         columnlist[ind] = columnlist[ind] with { Cards = col.Cards!.Value.Add(item.Card) };
                         break;
-                    case CardMoveFromColumn cm2: // Move card from column to cilumn
+                    case CardMoveFromColumn cm2: // Move card from Column to Column
                         var col1 = columnlist.Single(o => o.ID == cm2.FromColumn);
                         var ind1 = columnlist.IndexOf(col1);
                         columnlist[ind1] = columnlist[ind1] with { Cards = col1.Cards!.Value.Remove(item.Card) };
@@ -148,47 +148,25 @@ namespace SolitareSolver.Model
                         columnlist[ind2] = columnlist[ind2] with { Cards = col2.Cards!.Value.Add(item.Card) };
                         fromColumn = cm2.FromColumn;
                         break;
-                    case CardMoveToTopFromHand cm3:
+                    case CardMoveToTopFromHand cm3: //Move card from Hand to Top
                         hand = hand with { Cards = hand.Cards!.Value.Remove(item.Card) };
 
-                        var top = topslsit.SingleOrDefault(o => o.Color == cm3.Card.Color);
-                        ImmutableArray<Card>.Builder topcards;
-                        if (top != null)
-                        {
-                            topslsit.Remove(top);
-                            topcards = top.Cards.ToBuilder();
-                        }
-                        else
-                            topcards = ImmutableArray.CreateBuilder<Card>();
-
-                        topcards.Add(cm3.Card);
-                        top = new Top(cm3.Card.Color, topcards.ToImmutableArray());
-                        topslsit.Add(top);
+                        TopOperation(topslsit, cm3.Card);
                         break;
-                    case CardMoveToTopFromColumn cm4: // Move from Column to Top
+                    case CardMoveToTopFromColumn cm4: // Move card from Column to Top
                         col1 = columnlist.Single(o => o.ID == cm4.FromColumn);
                         ind1 = columnlist.IndexOf(col1);
                         columnlist[ind1] = columnlist[ind1] with { Cards = col1.Cards!.Value.Remove(item.Card) };
                         fromColumn = cm4.FromColumn;
 
-                        top = topslsit.SingleOrDefault(o => o.Color == cm4.Card.Color);
-                        if (top != null)
-                        {
-                            topslsit.Remove(top);
-                            topcards = top.Cards.ToBuilder();
-                        }
-                        else
-                            topcards = ImmutableArray.CreateBuilder<Card>();
-
-                        topcards.Add(cm4.Card);
-                        top = new Top(cm4.Card.Color, topcards.ToImmutableArray());
-                        topslsit.Add(top);
+                        TopOperation(topslsit, cm4.Card);
                         break;
                     default:
                         throw new NotImplementedException();
                 }
             }
 
+            //We only update position once
             if (fromColumn.HasValue)
             {
                 var col = columnlist.Single(o => o.ID == fromColumn);
@@ -206,6 +184,26 @@ namespace SolitareSolver.Model
             if (topslsit != null) tops.AddRange(topslsit);
 
             return new Table(hand, tops.ToImmutableArray(), Columns.RemoveRange(orgcolumntab).AddRange(columnlist), moves.ToImmutableArray());
+        }
+
+        private static void TopOperation(List<Top> topslsit, Card card)
+        {
+            ImmutableArray<Card>.Builder topcards;
+            Top? top;
+            // Remove old top if needed
+            top = topslsit.SingleOrDefault(o => o.Color == card.Color);
+            if (top != null)
+            {
+                topslsit.Remove(top);
+                topcards = top.Cards.ToBuilder();
+            }
+            else
+                topcards = ImmutableArray.CreateBuilder<Card>();
+
+            //Add card to the top
+            topcards.Add(card);
+            top = new Top(card.Color, topcards.ToImmutableArray());
+            topslsit.Add(top);
         }
     }
 }

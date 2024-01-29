@@ -20,15 +20,18 @@ namespace SolitareSolver.Model
     {
         private static readonly string[] ColorTexts = ["H", "D", "S", "C"];
         private static readonly string[] NumberTexts = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        //Get color for console
         public static string GetText(this Colors color)
         {
             return ColorTexts[(int)color];
         }
+        //Get Number for console
         public static string GetText(this Numbers number)
         {
             return NumberTexts[(int)number];
         }
 
+        // Check if colors match
         public static bool CheckColors(Colors color1, Colors color2)
         {
             return ((color1 == Colors.Hearts || color1==Colors.Diamonds) && (color2 == Colors.Spades || color2 == Colors.Clubs)) ||
