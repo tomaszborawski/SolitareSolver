@@ -16,16 +16,14 @@ namespace SolitareSolver.Test
             var card = new Card(Colors.Spades, Numbers.Ace);
             var t = new Table(new Hand(ImmutableArray<Card>.Empty.Add(card)), null, [], null);
 
-            t = Game.Game.RemoveAcesFromHand(t);
+            var moves  = Game.Game.RemoveAcesFromHand(t);
 
             Assert.Multiple(() =>
             {
-                Assert.That(t.Hand.Cards!.Value.IsEmpty, Is.True);
-                Assert.That(t.Tops!.Value.IsEmpty, Is.False);
-                Assert.That(t.Tops!.Value, Has.Length.EqualTo(1));
-                Assert.That(t.Tops!.Value[0].Color, Is.EqualTo(card.Color));
-                Assert.That(t.Tops!.Value[0].Cards, Has.Length.EqualTo(1));
-                Assert.That(t.Tops!.Value[0].Cards[0], Is.EqualTo(card));
+                Assert.That(moves, Has.Length.EqualTo(1));
+                Assert.That(moves[0].Moves, Has.Length.EqualTo(1));
+                Assert.That(moves[0].Moves[0].Card,Is.EqualTo(card));
+                Assert.That(moves[0].AfectedColumns, Has.Count.EqualTo(0));
             });
         }
 

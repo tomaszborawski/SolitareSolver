@@ -7,7 +7,7 @@ namespace SolitareSolver.Test
 {
     public class TableTests
     {
-        private Table? t;
+        private ITable? t;
 
         [SetUp]
         public void Setup()

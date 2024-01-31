@@ -3,17 +3,18 @@ using System.Collections.Immutable;
 using SolitareSolver;
 using SolitareSolver.Model;
 using SolitareSolver.Game;
-var table = Table.Generate();
-table = Game.RemoveAcesFromHand(table);
+var table = ITable.Generate();
+var moves = Game.RemoveAcesFromHand(table);
+foreach (var move in moves) table = table.ExecuteMoves(move);
 
-var moves = Game.GetInitialMoves(table);
+moves = Game.GetInitialMoves(table);
 foreach (var move in moves)
 {
     GetAndExecuteNextMoves(table, moves, move);
 }
 Console.ReadLine();
 
-static void GetAndExecuteNextMoves(Table table, ImmutableArray<CardMoves> moves, CardMoves move)
+static void GetAndExecuteNextMoves(ITable table, ImmutableArray<CardMoves> moves, CardMoves move)
 {
     table = table.ExecuteMoves(move);
     table.Show(moves);
