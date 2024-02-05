@@ -74,7 +74,7 @@ namespace SolitareSolver.Test
             Assert.Multiple(() =>
             {
                 Assert.That(move.AfectedColumns, Has.Count.EqualTo(2));
-                Assert.That(move.Moves.Count, Is.EqualTo(3));
+                Assert.That(move.Moves, Has.Length.EqualTo(3));
                 Assert.That(move.Moves[0].Card, Is.EqualTo(card4));
                 Assert.That(move.Moves[0].GetType(), Is.EqualTo(typeof(CardMoveFromHand)));
                 Assert.That(((CardMoveFromHand)(move.Moves[0])).ToColumn, Is.EqualTo(2));
@@ -108,7 +108,7 @@ namespace SolitareSolver.Test
             var move = ret[0];
             Assert.Multiple(() =>
             {
-                Assert.That(move.Moves.Count, Is.EqualTo(2));
+                Assert.That(move.Moves, Has.Length.EqualTo(2));
                 Assert.That(move.Moves[0].Card, Is.EqualTo(card2));
                 Assert.That(move.Moves[0].GetType(), Is.EqualTo(typeof(CardMoveFromColumn)));
                 Assert.That(((CardMoveFromColumn)(move.Moves[0])).ToColumn, Is.EqualTo(1));
@@ -142,7 +142,7 @@ namespace SolitareSolver.Test
             var move = ret[0];
             Assert.Multiple(() =>
             {
-                Assert.That(move.Moves.Count, Is.EqualTo(3));
+                Assert.That(move.Moves, Has.Length.EqualTo(3));
                 Assert.That(move.Moves[0].Card, Is.EqualTo(card1));
                 Assert.That(move.Moves[0].GetType(), Is.EqualTo(typeof(CardMoveFromHand)));
                 Assert.That(((CardMoveFromHand)(move.Moves[0])).ToColumn, Is.EqualTo(1));
@@ -174,7 +174,7 @@ namespace SolitareSolver.Test
             var move = ret[0];
             Assert.Multiple(() =>
             {
-                Assert.That(move.Moves.Count, Is.EqualTo(1));
+                Assert.That(move.Moves, Has.Length.EqualTo(1));
                 Assert.That(move.Moves[0].Card, Is.EqualTo(card2));
                 Assert.That(move.Moves[0].GetType(), Is.EqualTo(typeof(CardMoveToTopFromHand)));
             });
@@ -198,7 +198,7 @@ namespace SolitareSolver.Test
             var move = ret[0];
             Assert.Multiple(() =>
             {
-                Assert.That(move.Moves.Count, Is.EqualTo(1));
+                Assert.That(move.Moves, Has.Length.EqualTo(1));
                 Assert.That(move.Moves[0].Card, Is.EqualTo(card2));
                 Assert.That(move.Moves[0].GetType(), Is.EqualTo(typeof(CardMoveToTopFromColumn)));
                 Assert.That(((CardMoveToTopFromColumn)(move.Moves[0])).FromColumn, Is.EqualTo(1));
