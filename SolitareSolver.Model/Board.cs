@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SolitareSolver.Model
 {
-    public record Table(Hand Hand, ImmutableArray<Top>? Tops, ImmutableArray<Column> Columns, ImmutableArray<CardMove>? Moves) :ITable
+    public record Board(Hand Hand, ImmutableArray<Top>? Tops, ImmutableArray<Column> Columns, ImmutableArray<CardMove>? Moves) :IBoard
     {
         public void Show(ImmutableArray<CardMoves> moves)
         {
@@ -66,7 +66,7 @@ namespace SolitareSolver.Model
             }
 
         }
-        public ITable ExecuteMoves(CardMoves cardMoves)
+        public IBoard ExecuteMoves(CardMoves cardMoves)
         {
             //copy columns
             var columnlist = new List<Column>();
@@ -137,7 +137,7 @@ namespace SolitareSolver.Model
             if (orgtopslist != null) tops.RemoveRange(orgtopslist);
             if (topslsit != null) tops.AddRange(topslsit);
 
-            return new Table(hand, tops.ToImmutableArray(), Columns.RemoveRange(orgcolumntab).AddRange(columnlist), moves.ToImmutableArray());
+            return new Board(hand, tops.ToImmutableArray(), Columns.RemoveRange(orgcolumntab).AddRange(columnlist), moves.ToImmutableArray());
         }
 
         private static void TopOperation(List<Top> topslsit, Card card)

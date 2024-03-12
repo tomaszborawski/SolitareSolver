@@ -11,7 +11,7 @@ namespace SolitareSolver.Game
 {
     public static class Game
     {
-        public static ImmutableArray<CardMoves> RemoveAcesFromHand(ITable t) // Remove Aces from Hand
+        public static ImmutableArray<CardMoves> RemoveAcesFromHand(IBoard t) // Remove Aces from Hand
         {
             //Search Aces in Hand, remove from Hand and put it inro Top
             var ases = t.Hand.Cards!.Value.Where(o => o.Number == Numbers.Ace).Select(o => o).ToList();
@@ -28,7 +28,7 @@ namespace SolitareSolver.Game
                 return [];
         }
 
-        public static ImmutableArray<CardMoves> GetInitialMoves(ITable t)
+        public static ImmutableArray<CardMoves> GetInitialMoves(IBoard t)
         {
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
@@ -61,7 +61,7 @@ namespace SolitareSolver.Game
             return ret.ToImmutableArray();
         }
 
-        public static void RemoveAcesFromColumns(ITable t, ImmutableArray<CardMoves>.Builder ret)
+        public static void RemoveAcesFromColumns(IBoard t, ImmutableArray<CardMoves>.Builder ret)
         {
             //Search Aces in Columns, remove from Column and put it inro Top
             for (int i = 0; i < t.Columns.Length; i++)
@@ -77,7 +77,7 @@ namespace SolitareSolver.Game
             }
         }
 
-        public static void CheckColumnsForMove(ITable t, ImmutableArray<CardMoves>.Builder ret, Column colbegin, Column colend, Card cbegin, Card cend)
+        public static void CheckColumnsForMove(IBoard t, ImmutableArray<CardMoves>.Builder ret, Column colbegin, Column colend, Card cbegin, Card cend)
         {
             if (cbegin.Number != Numbers.Ace && cend.Number != Numbers.Ace) //Aces are on the Top
             {
@@ -115,7 +115,7 @@ namespace SolitareSolver.Game
                 }
             }
         }
-        public static ImmutableArray<CardMoves> GetNextMoves(ITable t, ImmutableArray<CardMoves> oldmoves, List<int> afectedColumns)
+        public static ImmutableArray<CardMoves> GetNextMoves(IBoard t, ImmutableArray<CardMoves> oldmoves, List<int> afectedColumns)
         {
             //Delete moves that we can't process because previosly we use these column
             var ret = oldmoves.ToBuilder();
@@ -169,7 +169,7 @@ namespace SolitareSolver.Game
             return ret.ToImmutableArray();
         }
 
-        public static void MoveCardfromHandAndColumnToTop(ITable t, ImmutableArray<CardMoves>.Builder ret)
+        public static void MoveCardfromHandAndColumnToTop(IBoard t, ImmutableArray<CardMoves>.Builder ret)
         {
             if (t.Tops != null)
             {
@@ -200,7 +200,7 @@ namespace SolitareSolver.Game
             }
         }
 
-        public static void MoveKingFromColumnOrHand(ITable t, ImmutableArray<CardMoves>.Builder ret)
+        public static void MoveKingFromColumnOrHand(IBoard t, ImmutableArray<CardMoves>.Builder ret)
         {
             // Do we have empty column?
             var emptyCols = t.Columns.Where(o => !o.Cards.HasValue || o.Cards.Value.Length == 0).ToList();

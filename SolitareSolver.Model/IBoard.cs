@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SolitareSolver.Model
 {
-    public interface ITable
+    public interface IBoard
     {
         Hand Hand { get; } 
         ImmutableArray<Top>? Tops { get; }
@@ -16,9 +16,9 @@ namespace SolitareSolver.Model
         ImmutableArray<CardMove>? Moves { get; }
 
         void Show(ImmutableArray<CardMoves> moves);
-        ITable ExecuteMoves(CardMoves cardMoves);
+        IBoard ExecuteMoves(CardMoves cardMoves);
 
-        static ITable Generate()
+        static IBoard Generate()
         {
             // Generate deck
             var colors = Enum.GetValues<Colors>();
@@ -61,7 +61,7 @@ namespace SolitareSolver.Model
                 if (!bitArray[cid]) hand.Add(deck[cid]);
             }
 
-            return new Table(new Hand(hand.ToImmutableArray()), null, columns.ToImmutableArray(), null);
+            return new Board(new Hand(hand.ToImmutableArray()), null, columns.ToImmutableArray(), null);
         }
     }
 }

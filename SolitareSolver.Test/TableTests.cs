@@ -7,7 +7,7 @@ namespace SolitareSolver.Test
 {
     public class TableTests
     {
-        private ITable? t;
+        private IBoard? t;
 
         [SetUp]
         public void Setup()
@@ -22,7 +22,7 @@ namespace SolitareSolver.Test
             columns.Add(new Column(3, ImmutableArray<Card>.Empty.Add(new(Colors.Hearts, Numbers.Jack)), 0));
             columns.Add(new Column(4, ImmutableArray<Card>.Empty.Add(new(Colors.Spades, Numbers.Ace)), 0));
 
-            t = new Table(new Hand(handcards.ToImmutableArray()), null, columns.ToImmutableArray(), null);
+            t = new Board(new Hand(handcards.ToImmutableArray()), null, columns.ToImmutableArray(), null);
         }
 
         [Test]

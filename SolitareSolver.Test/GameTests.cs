@@ -14,7 +14,7 @@ namespace SolitareSolver.Test
         public void TestRemoveAcesFromHand()
         {
             var card = new Card(Colors.Spades, Numbers.Ace);
-            var t = new Table(new Hand(ImmutableArray<Card>.Empty.Add(card)), null, [], null);
+            var t = new Board(new Hand(ImmutableArray<Card>.Empty.Add(card)), null, [], null);
 
             var moves  = Game.Game.RemoveAcesFromHand(t);
 
@@ -31,7 +31,7 @@ namespace SolitareSolver.Test
         public void TestRemoveAcesFromColumns()
         {
             var card = new Card(Colors.Spades, Numbers.Ace);
-            var t = new Table(new Hand(null), null, [new Column(1, ImmutableArray<Card>.Empty.Add(card), 0)], null);
+            var t = new Board(new Hand(null), null, [new Column(1, ImmutableArray<Card>.Empty.Add(card), 0)], null);
 
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
@@ -62,7 +62,7 @@ namespace SolitareSolver.Test
             var hand = new Hand([card4]);
             var column1 = new Column(1, [card1, card6, card2], 1);
             var column2 = new Column(2, [card3, card5], 1);
-            var t = new Table(hand, null, [column1, column2], null);
+            var t = new Board(hand, null, [column1, column2], null);
 
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
@@ -98,7 +98,7 @@ namespace SolitareSolver.Test
             var column1 = new Column(1, [], -1);
             var column2 = new Column(2, [card1, card2, card3], 1);
 
-            var t = new Table(new Hand(null), null, [column1, column2], null);
+            var t = new Board(new Hand(null), null, [column1, column2], null);
 
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
@@ -132,7 +132,7 @@ namespace SolitareSolver.Test
             var column1 = new Column(1, [], -1);
             var column2 = new Column(2, [card2, card3, card4], 1);
 
-            var t = new Table(hand, null, [column1, column2], null);
+            var t = new Board(hand, null, [column1, column2], null);
 
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
@@ -164,7 +164,7 @@ namespace SolitareSolver.Test
             var card2 = new Card(Colors.Spades, Numbers.Two);
             var hand = new Hand([card2]);
             var top = new Top(Colors.Spades, [card1]);
-            var t = new Table(hand, [top], [], null);
+            var t = new Board(hand, [top], [], null);
 
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
@@ -188,7 +188,7 @@ namespace SolitareSolver.Test
             var card3 = new Card(Colors.Diamonds, Numbers.Eight);
             var top = new Top(Colors.Spades, [card1]);
             var column = new Column(1, [card3, card2], 1);
-            var t = new Table(new Hand(null), [top], [column], null);
+            var t = new Board(new Hand(null), [top], [column], null);
 
             var ret = ImmutableArray.CreateBuilder<CardMoves>();
 
