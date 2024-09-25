@@ -125,7 +125,7 @@ namespace SolitareSolver.Model
             {
                 var col = columnlist.Single(o => o.ID == fromColumn);
                 var ind = columnlist.IndexOf(col);
-                columnlist[ind] = columnlist[ind] with { Position = col.Position - 1 };
+                columnlist[ind] = columnlist[ind] with { Position = col.Position == -1 ? -1 : col.Position - 1 };
             }
 
             //Add Moves
