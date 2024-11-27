@@ -41,7 +41,7 @@ namespace SolitareSolver.Model
                     {
                         Console.CursorLeft = (item.ID-1)*6;
                         Console.CursorTop = top;
-                        Console.ForegroundColor = (i < item.Position) ? ConsoleColor.White : ConsoleColor.Red;
+                        Console.ForegroundColor = (i <= item.Position) ? ConsoleColor.White : ConsoleColor.Red;
                         Console.Write(item.Cards.Value[i].Color.GetText());
                         Console.Write(item.Cards.Value[i].Number.GetText());
                         Console.CursorLeft = (item.ID - 1)*6 + 4;
